@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Agent Radar · 每日情报简报</title>
+  <style>
+    :root {
+      /* Anthropic-inspired Editorial Warm Palette */
+      --bg-canvas: #FAF9F5;
+      --bg-surface: #FFFFFF;
+      --bg-warm: #F4F2EA;
+      --bg-takeaway: #F5F1E8;
+      --border: #E8E5DC;
+      --border-strong: #D8D3C6;
+      --text-primary: #191918;
+      --text-secondary: #54524C;
+      --text-muted: #8A867D;
+      --accent: #D97757;
+      --accent-hover: #C26142;
+      --accent-soft: #FBF0EB;
+      --accent-border: #F1D3C5;
+      --sage: #3B7A57;
+      --sage-soft: #EDF5F0;
+      --ochre: #B47B2B;
+      --ochre-soft: #FBF5EA;
+      --slate: #2E6F95;
+      --slate-soft: #EEF5F9;
+      --crimson: #B8423D;
+      --crimson-soft: #FBEFEF;
+
+      --font-serif: "Iowan Old Style", "Palatino Linotype", Georgia, "Songti SC", "STSong", "Noto Serif SC", serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Inter", "Helvetica Neue", sans-serif;
+
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 2px rgba(25, 25, 24, 0.035);
+      --shadow-md: 0 8px 24px rgba(25, 25, 24, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* Sticky Editorial Masthead */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(250, 249, 245, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 15px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--text-primary);
+      display: grid;
+      place-items: center;
+      color: #FAF9F5;
+    }
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .date-select {
+      appearance: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 7px 32px 7px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2354524C' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      transition: border-color 0.15s;
+    }
+    .date-select:hover { border-color: var(--accent); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .btn-primary {
+      background: var(--text-primary);
+      color: #FAF9F5;
+    }
+    .btn-primary:hover { background: #2F2F2D; }
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-accent:hover { background: var(--accent-hover); }
+    .btn-ghost {
+      background: var(--bg-surface);
+      border-color: var(--border-strong);
+      color: var(--text-secondary);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Layout Container */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 24px 72px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    /* Section Heading */
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.01em;
+    }
+    .section-num {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 650;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+    .section-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* 1. Hero TL;DR */
+    .tldr-card {
+      padding: 24px 28px;
+      border-left: 3.5px solid var(--accent);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .tldr-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tldr-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .tldr-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: var(--bg-warm);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .stat-pill strong { color: var(--text-primary); font-weight: 600; }
+    .tldr-text {
+      font-family: var(--font-serif);
+      font-size: 17.5px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.72;
+    }
+
+    /* 2. Dashboard Panel */
+    .dashboard-card {
+      padding: 22px 26px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .dash-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .segmented {
+      display: inline-flex;
+      background: var(--bg-warm);
+      padding: 3px;
+      border-radius: 9px;
+      gap: 2px;
+    }
+    .seg-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .seg-btn.active {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(25, 25, 24, 0.08);
+    }
+    .dash-right-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .kpi-box {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 13px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); }
+    .kpi-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .kpi-value { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+    .kpi-delta { font-size: 12px; font-weight: 600; }
+    .delta-up { color: var(--sage); }
+    .delta-down { color: var(--crimson); }
+    .kpi-sub { font-size: 12px; color: var(--text-secondary); }
+
+    /* SVG Chart */
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+    }
+    .chart-svg {
+      width: 100%;
+      height: 300px;
+      display: block;
+      overflow: visible;
+    }
+    .chart-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(25, 25, 24, 0.95);
+      color: #FAF9F5;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      min-width: 190px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.12s, transform 0.12s;
+      z-index: 20;
+    }
+    .chart-tooltip.show { opacity: 1; transform: translateY(0); }
+    .tt-date { font-weight: 650; margin-bottom: 6px; color: #E8E5DC; font-size: 12px; }
+    .tt-event {
+      background: rgba(217, 119, 87, 0.25);
+      border: 1px solid rgba(217, 119, 87, 0.55);
+      border-radius: 5px;
+      padding: 3px 7px;
+      margin-bottom: 7px;
+      color: #FDE8DF;
+      font-size: 11.5px;
+    }
+    .tt-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 2px 0;
+    }
+    .tt-name { display: flex; align-items: center; gap: 6px; color: #D8D3C6; }
+    .tt-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .tt-val { font-weight: 650; font-variant-numeric: tabular-nums; }
+
+    .chart-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .legend-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      font-size: 12px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .legend-pill.off {
+      opacity: 0.4;
+      background: var(--bg-warm);
+      text-decoration: line-through;
+    }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .sample-note { font-size: 11.5px; color: var(--text-muted); }
+
+    /* Peak Event Attribution Strip */
+    .events-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 10px;
+      padding-top: 4px;
+    }
+    .event-note-card {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 10px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .event-note-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--text-primary);
+    }
+    .event-note-date {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 1px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .event-note-reason {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* 3. Pulse Filter & Evidence */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .source-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .source-pill {
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .source-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .source-pill.active {
+      background: var(--text-primary);
+      border-color: var(--text-primary);
+      color: #FAF9F5;
+    }
+
+    .evidence-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .sub-block-title {
+      font-family: var(--font-serif);
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sub-block-title span {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* 3.1 Understanding */
+    .understanding-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .insight-card {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .insight-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .pub-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .expand-row {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+    }
+    .tag-chip {
+      align-self: flex-start;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 5px;
+      background: var(--bg-warm);
+      color: var(--text-secondary);
+    }
+    .insight-title {
+      font-size: 14.5px;
+      font-weight: 650;
+      line-height: 1.48;
+      color: var(--text-primary);
+    }
+    .insight-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.62;
+      flex: 1;
+    }
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      transition: color 0.15s;
+    }
+    .source-link:hover { color: var(--accent); }
+
+    /* 3.2 Products: Domestic vs Overseas Two-Type Layout with Mobile App Logos */
+    .product-types-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .product-type-block {
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px 20px;
+    }
+    .product-type-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+    .type-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .type-pill {
+      font-size: 12px;
+      font-weight: 650;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .type-cn {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+    }
+    .type-global {
+      background: var(--slate-soft);
+      color: var(--slate);
+      border: 1px solid #C9DFEC;
+    }
+    .type-sub {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .product-card {
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .product-card:hover {
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-md);
+    }
+    .app-logo-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(25, 25, 24, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+      display: grid;
+      place-items: center;
+      background: #fff;
+    }
+    .app-logo-box svg,
+    .app-logo-box img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .product-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .product-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .product-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .product-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .product-vendor {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .stage-pill {
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: var(--bg-warm);
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .product-highlight {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.48;
+    }
+    .product-detail {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* 3.3 Aggregated Sentiment Board */
+    .sentiment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .sentiment-col {
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sentiment-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sentiment-title {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .s-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .s-praise .s-dot { background: var(--sage); }
+    .s-suggest .s-dot { background: var(--slate); }
+    .s-complain .s-dot { background: var(--crimson); }
+    .sentiment-total {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cluster-card {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 13px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.15s;
+    }
+    .cluster-card.is-hot {
+      background: #FFFDFB;
+      border-color: var(--accent-border);
+    }
+    .cluster-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .cluster-product {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-warm);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+    .heat-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .count-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .heat-badge {
+      font-size: 11px;
+      font-weight: 650;
+      padding: 1px 7px;
+      border-radius: 999px;
+    }
+    .heat-high {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+    }
+    .heat-mid {
+      background: var(--ochre-soft);
+      color: var(--ochre);
+    }
+    .heat-low {
+      background: var(--bg-warm);
+      color: var(--text-muted);
+    }
+    .cluster-topic {
+      font-size: 13.5px;
+      font-weight: 650;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+    .heat-bar-track {
+      height: 4px;
+      width: 100%;
+      background: var(--bg-warm);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .heat-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+    .s-praise .heat-bar-fill { background: var(--sage); }
+    .s-suggest .heat-bar-fill { background: var(--slate); }
+    .s-complain .heat-bar-fill { background: var(--crimson); }
+    .cluster-card.is-hot .heat-bar-fill { background: var(--accent); }
+
+    .cluster-summary {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .cluster-quotes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+    }
+    .quote-line {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      padding-left: 8px;
+      border-left: 2px solid var(--border-strong);
+    }
+    .cluster-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .empty-state {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      padding: 16px 4px;
+      text-align: center;
+    }
+
+    /* 4. Product Takeaways (Bottom Executive Conclusion) */
+    .rena-section {
+      background: var(--bg-takeaway);
+      border: 1px solid var(--border-strong);
+      border-radius: 18px;
+      padding: 26px 26px 28px;
+    }
+    .takeaways-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .takeaway-card {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .takeaway-card:hover {
+      border-color: var(--accent-border);
+      box-shadow: var(--shadow-md);
+    }
+    .takeaway-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .module-tag {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-warm);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .action-badge {
+      font-size: 11.5px;
+      font-weight: 650;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .action-adopt { color: var(--sage); background: var(--sage-soft); }
+    .action-warn  { color: var(--crimson); background: var(--crimson-soft); }
+    .action-watch { color: var(--ochre); background: var(--ochre-soft); }
+    .takeaway-title {
+      font-family: var(--font-serif);
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.45;
+    }
+    .takeaway-block {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.58;
+    }
+    .takeaway-block b {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .takeaway-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(25, 25, 24, 0.45);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 520px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 22px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title { font-family: var(--font-serif); font-size: 17px; font-weight: 700; }
+    .modal-close {
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+    .field input {
+      padding: 7px 10px;
+      border: 1px solid var(--border-strong);
+      border-radius: 7px;
+      font-size: 13px;
+      color: var(--text-primary);
+      background: var(--bg-canvas);
+    }
+    .field input:focus { outline: none; border-color: var(--accent); background: #fff; }
+    .modal-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text-primary);
+      color: #FAF9F5;
+      padding: 10px 16px;
+      border-radius: 9px;
+      font-size: 13px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.2s;
+      z-index: 120;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 960px) {
+      .takeaways-grid,
+      .understanding-grid,
+      .sentiment-grid,
+      .kpi-row,
+      .products-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L14.2 9.2L21 11.5L14.2 13.8L12 21L9.8 13.8L3 11.5L9.8 9.2L12 2Z" fill="#D97757"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">Personal Agent Radar</div>
+          <div class="brand-sub">每日行业简报 · 热度晴雨表 · PC 端产品洞察</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <select id="dateSelect" class="date-select" aria-label="选择日报日期"></select>
+        <button id="exportBtn" class="btn btn-primary" title="导出包含当日完整数据的独立 HTML 单文件">
+          导出单页 HTML
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 1. 今日核心判断 (TL;DR) -->
+    <section>
+      <div class="card tldr-card">
+        <div class="tldr-top">
+          <span class="tldr-label">Executive Summary · 今日核心判断</span>
+          <div id="tldrStats" class="tldr-stats"></div>
+        </div>
+        <div id="tldrText" class="tldr-text"></div>
+      </div>
+    </section>
+
+    <!-- 2. 热度趋势监控 (Search & Buzz) -->
+    <section>
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-num">01 · TRENDS</span>
+          热度趋势监控
+        </div>
+        <div class="section-desc">默认近 90 天 · 优先看重点产品词，可切换品类概念词</div>
+      </div>
+
+      <div class="card dashboard-card">
+        <div class="dash-controls">
+          <!-- Default Order: 1. 微信指数, 2. Google Trends, 3. 百度指数 -->
+          <div class="segmented" id="platformTabs">
+            <button class="seg-btn active" data-platform="google">Google Trends · 实测</button>
+            <button class="seg-btn" data-platform="baidu">百度指数 · 实测</button>
+          </div>
+          <div class="dash-right-controls">
+            <div class="segmented" id="groupTabs">
+              <button class="seg-btn active" data-group="products">重点产品词</button>
+              <button class="seg-btn" data-group="concepts">品类概念词</button>
+            </div>
+            <div class="segmented" id="rangeTabs">
+              <button class="seg-btn" data-range="7">近 7 天</button>
+              <button class="seg-btn" data-range="30">近 30 天</button>
+              <button class="seg-btn active" data-range="90">近 90 天</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="kpiRow" class="kpi-row"></div>
+
+        <div class="chart-wrap" id="chartWrap">
+          <svg id="trendSvg" class="chart-svg"></svg>
+          <div id="chartTooltip" class="chart-tooltip"></div>
+        </div>
+
+        <div class="chart-footer">
+          <div id="legendBar" class="legend-bar"></div>
+          <div id="sampleNote" class="sample-note"></div>
+        </div>
+        <div id="eventsStrip" class="events-strip"></div>
+      </div>
+    </section>
+
+    <!-- 3. 每日三维洞察 (Daily Pulse) -->
+    <section>
+      <div class="filter-bar">
+        <div class="section-title">
+          <span class="section-num">02 · PULSE</span>
+          每日三维洞察与讨论聚合
+        </div>
+        <div class="source-pills" id="sourceFilter">
+          <button class="source-pill active" data-source="all">全部来源</button>
+          <button class="source-pill" data-source="xiaohongshu">小红书</button>
+          <button class="source-pill" data-source="twitter">Twitter (X)</button>
+          <button class="source-pill" data-source="wechat_mp">微信公众号</button>
+        </div>
+      </div>
+
+      <div class="evidence-stack">
+        <!-- 3.1 Understanding -->
+        <div>
+          <div class="sub-block-title">① 大家对 Personal Agent 的理解 <span>按发布时间倒序（最新在前）· 默认展示 Top 3，可展开全部</span></div>
+          <div id="understandingGrid" class="understanding-grid"></div>
+          <div id="understandingExpand" class="expand-row"></div>
+        </div>
+
+        <!-- 3.2 New Product Forms: Domestic vs Overseas with Mobile App Logos -->
+        <div>
+          <div class="sub-block-title">② 新产品形态与能力追踪 <span>按国内 / 海外分为两大阵营 · 附移动端 App Logo</span></div>
+          <div id="productTypesWrap" class="product-types-wrap"></div>
+        </div>
+
+        <!-- 3.3 Aggregated Sentiment Board -->
+        <div>
+          <div class="sub-block-title">③ 用户真实感受情绪表 <span>同类观点聚合统计 · 按讨论热度从高到低排序</span></div>
+          <div id="sentimentGrid" class="sentiment-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 对 PC 端 Personal Agent 产品的启示 (放最下面收口) -->
+    <section class="rena-section">
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-num">03 · PRODUCT INSIGHTS</span>
+          对 PC 端 Personal Agent 产品的启示
+        </div>
+        <div class="section-desc">结合外部热度与高频用户体感，收敛到桌面端产品可执行动作</div>
+      </div>
+      <div id="takeawaysGrid" class="takeaways-grid"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- INLINE_DATA_START -->
+  <script src="data/manifest.js?v=20261126_11"></script>
+  <script src="data/trends.js?v=20261126_11"></script>
+  <script src="data/daily/2026-11-26.js?v=20261126_11"></script>
+  <script src="data/daily/2026-11-25.js?v=20261126_11"></script>
+  <!-- INLINE_DATA_END -->
+
+  <script>
+    (function () {
+      // Official Apple App Store 400x400 Mobile App Icons (verified from apps.apple.com)
+      const REAL_APP_ICONS = {
+        xiaodou:      "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/be/e4/d6/bee4d687-c815-815f-f794-dc55e1a5e404/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        today_app:    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/41/80/f0/4180f0c8-5b34-30b3-cea3-b5b97b9e73fa/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        qianwengo:    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/13/56/db/1356dba0-d8f5-09a4-5500-0db33f5dd19f/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        xiaowei:      "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/ec/36/1f/ec361f16-e24f-8470-dce8-b792c70dd943/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        lingguang:    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/83/2f/53/832f5385-6db5-9109-f327-8e308d278542/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        yuanbao:      "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/cf/4a/ec/cf4aec31-58d0-c0b3-d96b-c64ff828a7a9/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        meta_muse:    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/30/98/3f/30983f86-84d0-7e28-164e-c423522da4d2/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        grok_bot:     "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/c9/a5/b8/c9a5b88a-9411-b231-62fa-a7a3745255dd/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        claude_duet:  "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/ae/6c/e2/ae6ce2b4-d9b2-3b9d-3ff0-9667164397ff/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        openai_dots:  "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/0e/e2/52/0ee25280-743a-7edc-0dfb-fba12094ef31/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg",
+        gemini_spark: "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/d2/22/c7/d222c7f9-81de-3fb6-9847-640affc4d377/Placeholder.mill/400x400Icon.ApSiOS01-75.jpg"
+      };
+
+      const state = {
+        date: (window.RADAR_MANIFEST && window.RADAR_MANIFEST[0]?.date) || "2026-11-26",
+        platform: "google",
+        group: "products",
+        range: 90,          // Default: 90 days
+        sourceFilter: "all",
+        expandUnderstanding: false,
+        hiddenSeries: {}
+      };
+
+      const els = {
+        dateSelect: document.getElementById("dateSelect"),
+        exportBtn: document.getElementById("exportBtn"),
+        tldrStats: document.getElementById("tldrStats"),
+        tldrText: document.getElementById("tldrText"),
+        takeawaysGrid: document.getElementById("takeawaysGrid"),
+        platformTabs: document.getElementById("platformTabs"),
+        groupTabs: document.getElementById("groupTabs"),
+        rangeTabs: document.getElementById("rangeTabs"),
+        kpiRow: document.getElementById("kpiRow"),
+        trendSvg: document.getElementById("trendSvg"),
+        chartWrap: document.getElementById("chartWrap"),
+        chartTooltip: document.getElementById("chartTooltip"),
+        legendBar: document.getElementById("legendBar"),
+        sampleNote: document.getElementById("sampleNote"),
+        eventsStrip: document.getElementById("eventsStrip"),
+        sourceFilter: document.getElementById("sourceFilter"),
+        understandingGrid: document.getElementById("understandingGrid"),
+        understandingExpand: document.getElementById("understandingExpand"),
+        productTypesWrap: document.getElementById("productTypesWrap"),
+        sentimentGrid: document.getElementById("sentimentGrid"),
+        toast: document.getElementById("toast")
+      };
+
+      function showToast(msg) {
+        els.toast.textContent = msg;
+        els.toast.classList.add("show");
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => els.toast.classList.remove("show"), 2600);
+      }
+
+      function initVisibilityDefaults() {
+        const platforms = window.RADAR_TRENDS.platforms;
+        Object.keys(platforms).forEach(p => {
+          ["products", "concepts"].forEach(g => {
+            platforms[p].groups[g].forEach(s => {
+              if (s.defaultVisible === false) {
+                state.hiddenSeries[`${p}:${g}:${s.key}`] = true;
+              }
+            });
+          });
+        });
+      }
+
+      function populateDates() {
+        els.dateSelect.innerHTML = "";
+        (window.RADAR_MANIFEST || []).forEach(item => {
+          const opt = document.createElement("option");
+          opt.value = item.date;
+          opt.textContent = item.label;
+          if (item.date === state.date) opt.selected = true;
+          els.dateSelect.appendChild(opt);
+        });
+      }
+
+      function loadDailyAndRender(date) {
+        if (window.RADAR_DAILY && window.RADAR_DAILY[date]) {
+          state.date = date;
+          renderDaily();
+          return;
+        }
+        const script = document.createElement("script");
+        script.src = `data/daily/${date}.js`;
+        script.onload = () => {
+          state.date = date;
+          renderDaily();
+        };
+        script.onerror = () => showToast(`未找到 ${date} 的日报数据文件`);
+        document.body.appendChild(script);
+      }
+
+      function renderDaily() {
+        const d = window.RADAR_DAILY[state.date];
+        if (!d) return;
+
+        // 1. TL;DR
+        els.tldrText.textContent = d.tldr;
+        els.tldrStats.innerHTML = `
+          <span class="stat-pill">聚合讨论 <strong>${d.stats.signalsCount}</strong> 条</span>
+          <span class="stat-pill">焦点产品 <strong>${d.stats.topProduct}</strong></span>
+          <span class="stat-pill">${d.stats.sentimentSplit}</span>
+        `;
+
+        // 3. Evidence
+        renderEvidence();
+
+        // 4. Product Takeaways (bottom)
+        els.takeawaysGrid.innerHTML = d.renaTakeaways.map(item => `
+          <article class="card takeaway-card">
+            <div class="takeaway-meta">
+              <span class="module-tag">${item.module}</span>
+              <span class="action-badge action-${item.actionType}">${item.action}</span>
+            </div>
+            <div class="takeaway-title">${item.title}</div>
+            <div class="takeaway-block"><b>外部信号：</b>${item.signal}</div>
+            <div class="takeaway-divider"></div>
+            <div class="takeaway-block"><b>产品启示：</b>${item.implication}</div>
+          </article>
+        `).join("");
+      }
+
+      function matchSource(src) {
+        return state.sourceFilter === "all" || src === state.sourceFilter;
+      }
+
+      function matchClusterSource(sources) {
+        return state.sourceFilter === "all" || (sources || []).includes(state.sourceFilter);
+      }
+
+      function renderProductLogo(item) {
+        const iconUrl = item.logoUrl || REAL_APP_ICONS[item.id];
+        const initial = (item.name || "A").slice(0, 1);
+        if (iconUrl) {
+          return `<div class="app-logo-box"><img src="${iconUrl}" alt="${item.name} App 图标" referrerpolicy="no-referrer" loading="lazy" onerror="this.outerHTML='<span style=&quot;font-weight:700;font-size:18px;color:#54524C;&quot;>${initial}</span>'" /></div>`;
+        }
+        return `<div class="app-logo-box"><span style="font-weight:700;font-size:18px;color:#54524C;">${initial}</span></div>`;
+      }
+
+      function getHeatMeta(count) {
+        if (count >= 22) return { cls: "heat-high", label: "高热", isHot: true };
+        if (count >= 14) return { cls: "heat-mid",  label: "升温", isHot: false };
+        return { cls: "heat-low", label: "常规", isHot: false };
+      }
+
+      function renderEvidence() {
+        const d = window.RADAR_DAILY[state.date];
+        if (!d) return;
+
+        // 3.1 Understanding (sorted newest-first by publishedAt; show Top 3 by default with expand button)
+        const uList = [...(d.understanding || [])]
+          .filter(x => matchSource(x.source))
+          .sort((a, b) => String(b.publishedAt || "").localeCompare(String(a.publishedAt || "")));
+        const visibleU = state.expandUnderstanding ? uList : uList.slice(0, 3);
+        els.understandingGrid.innerHTML = visibleU.length
+          ? visibleU.map(item => `
+              <article class="card insight-card">
+                <div class="insight-top">
+                  <span class="tag-chip">${item.tag}</span>
+                  <span class="pub-time">${item.publishedAt || d.date}</span>
+                </div>
+                <div class="insight-title">${item.title}</div>
+                <div class="insight-summary">${item.summary}</div>
+                <a class="source-link" href="${item.url}" target="_blank" rel="noopener">
+                  ${item.linkType === "search" ? "检索原文" : "查看原文"} · ${item.sourceName} ↗
+                </a>
+              </article>
+            `).join("")
+          : `<div class="card empty-state" style="grid-column:1/-1;">当前来源筛选下暂无「认知与定义」条目（小红书站内原帖尚未接入）</div>`;
+
+        if (uList.length > 3) {
+          els.understandingExpand.innerHTML = `
+            <button class="btn btn-ghost" id="toggleExpandU">
+              ${state.expandUnderstanding ? "收起（仅看最新 3 篇）" : `展开全部收录文章（共 ${uList.length} 篇，还有 ${uList.length - 3} 篇）`}
+            </button>
+          `;
+          document.getElementById("toggleExpandU").addEventListener("click", () => {
+            state.expandUnderstanding = !state.expandUnderstanding;
+            renderEvidence();
+          });
+        } else {
+          els.understandingExpand.innerHTML = "";
+        }
+
+        // 3.2 Products grouped by Domestic vs Overseas (support fallback if legacy array; keep visible across source filters)
+        const rawProducts = Array.isArray(d.newProducts)
+          ? { domestic: d.newProducts.filter(x => x.region === "国内"), overseas: d.newProducts.filter(x => x.region !== "国内") }
+          : (d.newProducts || { domestic: [], overseas: [] });
+        const domestic = [...(rawProducts.domestic || [])].sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
+        const overseas = [...(rawProducts.overseas || [])].sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
+
+        const renderProductBlock = (typeTitle, typeSub, pillClass, list) => `
+          <div class="product-type-block">
+            <div class="product-type-head">
+              <div class="type-badge-wrap">
+                <span class="type-pill ${pillClass}">${typeTitle}</span>
+                <span class="type-sub">${typeSub}</span>
+              </div>
+              <span class="type-sub">共 ${list.length} 款</span>
+            </div>
+            ${list.length ? `
+              <div class="products-grid">
+                ${list.map(item => `
+                  <article class="card product-card">
+                    ${renderProductLogo(item)}
+                    <div class="product-body">
+                      <div class="product-top">
+                        <div class="product-title-row">
+                          <span class="product-name">${item.name}</span>
+                          <span class="product-vendor">${item.vendor || ""}</span>
+                        </div>
+                        <span class="stage-pill">${item.updatedAt ? `${item.updatedAt} · ` : ""}${item.stage}</span>
+                      </div>
+                      <div class="product-highlight">${item.highlight}</div>
+                      <div class="product-detail">${item.detail}</div>
+                      <a class="source-link" href="${item.url}" target="_blank" rel="noopener">
+                        检索动态 · ${item.sourceName} ↗
+                      </a>
+                    </div>
+                  </article>
+                `).join("")}
+              </div>
+            ` : `<div class="empty-state">暂无产品动态</div>`}
+          </div>
+        `;
+
+        els.productTypesWrap.innerHTML =
+          renderProductBlock("国内阵营 · Domestic", "字节 / 阿里 / 腾讯 / 蚂蚁等生态落地", "type-cn", domestic) +
+          renderProductBlock("海外阵营 · Overseas", "Meta / xAI / Anthropic / OpenAI / Google 等前沿形态", "type-global", overseas);
+
+        // 3.3 Sentiment Clusters sorted by count descending
+        const cols = [
+          { key: "praise", cls: "s-praise", title: "夸 · Aha Moment", items: (d.sentiment.praise || []).filter(x => matchClusterSource(x.sources)) },
+          { key: "suggestions", cls: "s-suggest", title: "建议 · 期待能力", items: (d.sentiment.suggestions || []).filter(x => matchClusterSource(x.sources)) },
+          { key: "complaints", cls: "s-complain", title: "吐槽 · 劝退点", items: (d.sentiment.complaints || []).filter(x => matchClusterSource(x.sources)) }
+        ];
+
+        // Global max count across visible clusters for proportional heat bar
+        const allCounts = cols.flatMap(c => c.items.map(i => i.count || 0));
+        const maxCount = Math.max(1, ...allCounts);
+
+        els.sentimentGrid.innerHTML = cols.map(col => {
+          const sorted = [...col.items].sort((a, b) => (b.count || 0) - (a.count || 0));
+          const totalMentions = sorted.reduce((acc, x) => acc + (x.count || 0), 0);
+          return `
+            <div class="card sentiment-col ${col.cls}">
+              <div class="sentiment-head">
+                <div class="sentiment-title"><span class="s-dot"></span>${col.title}</div>
+                <span class="sentiment-total">共 ${totalMentions} 条讨论</span>
+              </div>
+              ${sorted.length ? sorted.map((c, idx) => {
+                const heat = getHeatMeta(c.count);
+                const pct = Math.max(14, Math.round((c.count / maxCount) * 100));
+                const rankBadge = idx === 0 && heat.isHot ? `🔥 ${heat.label} TOP 1` : (heat.isHot ? `🔥 ${heat.label}` : heat.label);
+                return `
+                  <div class="cluster-card ${heat.isHot ? "is-hot" : ""}">
+                    <div class="cluster-top">
+                      <span class="cluster-product">${c.product}</span>
+                      <div class="heat-group">
+                        <span class="count-badge">${c.count} 条</span>
+                        <span class="heat-badge ${heat.cls}">${rankBadge}</span>
+                      </div>
+                    </div>
+                    <div class="cluster-topic">${c.topic}</div>
+                    <div class="heat-bar-track"><div class="heat-bar-fill" style="width:${pct}%"></div></div>
+                    <div class="cluster-summary">${c.summary}</div>
+                    <div class="cluster-quotes">
+                      ${(c.quotes || []).map(q => `<div class="quote-line">${q}</div>`).join("")}
+                    </div>
+                    <div class="cluster-foot">
+                      <span>分布：${c.sourceBreakdown}</span>
+                    </div>
+                  </div>
+                `;
+              }).join("") : `<div class="empty-state">当前来源筛选下暂无聚合条目</div>`}
+            </div>
+          `;
+        }).join("");
+      }
+
+      /* ===================== TREND CHART ===================== */
+      function renderTrends() {
+        const T = window.RADAR_TRENDS;
+        const pData = T.platforms[state.platform];
+        const allDates = pData.dates || T.dates;
+        const allSeries = pData.groups[state.group] || [];
+        if (!allSeries.length) {
+          const emptyMsg = (state.group === "concepts" && pData.groups.conceptsEmptyMessage) || "当前词库在该平台暂未被收录";
+          els.kpiRow.innerHTML = `
+            <div class="kpi-box" style="grid-column:1/-1;">
+              <div class="kpi-label">${pData.name} · 收录状态说明</div>
+              <div class="kpi-sub" style="color:var(--text-primary);font-size:13.5px;margin-top:4px;">${emptyMsg}</div>
+            </div>
+          `;
+          els.trendSvg.innerHTML = "";
+          els.trendSvg.style.height = "0px";
+          els.legendBar.innerHTML = "";
+          els.sampleNote.textContent = pData.note;
+          els.eventsStrip.style.display = "none";
+          els.eventsStrip.innerHTML = "";
+          return;
+        }
+        els.trendSvg.style.height = "300px";
+        const sliceStart = Math.max(0, allDates.length - state.range);
+        const dates = allDates.slice(sliceStart);
+        const activeSeries = allSeries.filter(s => !state.hiddenSeries[`${state.platform}:${state.group}:${s.key}`]);
+
+        // KPI Cards
+        const stats = allSeries.map(s => {
+          const vals = s.values.slice(sliceStart);
+          const cur = vals[vals.length - 1];
+          const prevIdx = Math.max(0, vals.length - 8);
+          const prev = vals[prevIdx] || 1;
+          const pct = Math.round(((cur - prev) / prev) * 100);
+          return { name: s.name, cur, pct, color: s.color };
+        });
+        const topByVal = [...stats].sort((a, b) => b.cur - a.cur)[0];
+        const topByGrowth = [...stats].sort((a, b) => b.pct - a.pct)[0];
+        const relevantEvents = T.events.filter(
+          e => e.platform === state.platform && (!e.group || e.group === state.group) && dates.includes(e.date)
+        );
+        const latestEvent = relevantEvents[relevantEvents.length - 1];
+
+        els.kpiRow.innerHTML = `
+          <div class="kpi-box">
+            <div class="kpi-label">${pData.name} · 当前热度最高</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">${topByVal.name}</span>
+              <span class="kpi-delta delta-up">${topByVal.cur}${pData.unit}</span>
+            </div>
+            <div class="kpi-sub">近 7 日变化 ${topByVal.pct >= 0 ? "+" : ""}${topByVal.pct}%</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">近 7 日增速最快</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">${topByGrowth.name}</span>
+              <span class="kpi-delta ${topByGrowth.pct >= 0 ? "delta-up" : "delta-down"}">${topByGrowth.pct >= 0 ? "+" : ""}${topByGrowth.pct}%</span>
+            </div>
+            <div class="kpi-sub">最新指数 ${topByGrowth.cur}${pData.unit}</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">区间内关键波峰事件</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value" style="font-size:15px;">${latestEvent ? latestEvent.label : "暂无标注事件"}</span>
+            </div>
+            <div class="kpi-sub">${latestEvent ? `发生于 ${latestEvent.date} · 图表竖线已打点` : "可在 trends.js 中追加事件打点"}</div>
+          </div>
+        `;
+
+        // Legend
+        els.legendBar.innerHTML = allSeries.map(s => {
+          const isOff = !!state.hiddenSeries[`${state.platform}:${state.group}:${s.key}`];
+          return `
+            <button class="legend-pill ${isOff ? "off" : ""}" data-key="${s.key}">
+              <span class="legend-dot" style="background:${s.color}"></span>
+              ${s.name}
+            </button>
+          `;
+        }).join("");
+
+        els.sampleNote.textContent = pData.note;
+
+        // Render Peak Event Attribution Cards below chart (left-to-right chronological order matching X-axis)
+        if (relevantEvents.length) {
+          els.eventsStrip.style.display = "grid";
+          els.eventsStrip.innerHTML = [...relevantEvents]
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .map(ev => `
+              <div class="event-note-card">
+                <div class="event-note-head">
+                  <span>${ev.label}</span>
+                  <span class="event-note-date">${ev.date}</span>
+                </div>
+                <div class="event-note-reason">${ev.reason || ""}</div>
+              </div>
+            `).join("");
+        } else {
+          els.eventsStrip.style.display = "none";
+          els.eventsStrip.innerHTML = "";
+        }
+
+        // Draw SVG
+        const svg = els.trendSvg;
+        const W = Math.max(640, els.chartWrap.clientWidth || 1000);
+        const H = 315;
+        const pad = { top: 58, right: 20, bottom: 32, left: 48 };
+        const plotW = W - pad.left - pad.right;
+        const plotH = H - pad.top - pad.bottom;
+
+        svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+        let maxVal = 10;
+        activeSeries.forEach(s => {
+          s.values.slice(sliceStart).forEach(v => { if (v > maxVal) maxVal = v; });
+        });
+        maxVal = Math.ceil(maxVal * 1.12);
+
+        const xAt = i => pad.left + (dates.length === 1 ? plotW / 2 : (i / (dates.length - 1)) * plotW);
+        const yAt = v => pad.top + plotH - (v / maxVal) * plotH;
+
+        let html = "";
+
+        // Horizontal gridlines
+        const ticks = 4;
+        for (let t = 0; t <= ticks; t++) {
+          const v = Math.round((maxVal / ticks) * t);
+          const y = yAt(v);
+          html += `<line x1="${pad.left}" y1="${y}" x2="${W - pad.right}" y2="${y}" stroke="#ECE9E0" stroke-width="1" />`;
+          html += `<text x="${pad.left - 8}" y="${y + 4}" text-anchor="end" font-size="11" fill="#8A867D">${v}</text>`;
+        }
+
+        // X axis labels
+        const step = dates.length <= 10 ? 1 : (dates.length <= 35 ? 4 : 11);
+        dates.forEach((dt, i) => {
+          if (i % step === 0 || i === dates.length - 1) {
+            html += `<text x="${xAt(i)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="#8A867D">${dt}</text>`;
+          }
+        });
+
+        // Event pins with multi-lane bounding-box collision avoidance
+        const laneRightEdge = [-Infinity, -Infinity, -Infinity];
+        const laneYs = [pad.top - 16, pad.top - 33, pad.top - 50];
+        const sortedEvents = [...relevantEvents]
+          .map(ev => ({ ev, idx: dates.indexOf(ev.date) }))
+          .filter(x => x.idx !== -1)
+          .sort((a, b) => a.idx - b.idx);
+
+        sortedEvents.forEach(({ ev, idx }) => {
+          const x = xAt(idx);
+          // Estimate text pixel width (CJK ~10.5px, ASCII ~6.2px)
+          let estW = 14;
+          for (const ch of ev.label) estW += /[\u4e00-\u9fa5]/.test(ch) ? 10.8 : 6.4;
+          const halfW = estW / 2;
+          let cx = Math.min(W - pad.right - halfW, Math.max(pad.left + halfW, x));
+          let left = cx - halfW;
+          let right = cx + halfW;
+
+          // Pick first lane with no horizontal overlap (12px gap)
+          let lane = 0;
+          for (let l = 0; l < laneRightEdge.length; l++) {
+            if (left > laneRightEdge[l] + 12) {
+              lane = l;
+              break;
+            }
+            lane = l;
+          }
+          // If even last lane collides, nudge right cleanly
+          if (left <= laneRightEdge[lane] + 12) {
+            const shift = laneRightEdge[lane] + 12 - left;
+            cx = Math.min(W - pad.right - halfW, cx + shift);
+            left = cx - halfW;
+            right = cx + halfW;
+          }
+          laneRightEdge[lane] = right;
+          const labelY = laneYs[lane];
+
+          html += `
+            <line x1="${x}" y1="${pad.top - 6}" x2="${x}" y2="${pad.top + plotH}" stroke="#E6C7B8" stroke-width="1.2" stroke-dasharray="3 3" />
+            <circle cx="${x}" cy="${pad.top - 6}" r="3.5" fill="#D97757" />
+            ${lane > 0 ? `<line x1="${x}" y1="${pad.top - 9}" x2="${x}" y2="${labelY + 4}" stroke="#E6C7B8" stroke-width="1" />` : ""}
+            <text x="${cx.toFixed(1)}" y="${labelY}" text-anchor="middle" font-size="10.5" font-weight="600" fill="#B85637">${ev.label}</text>
+          `;
+        });
+
+        // Series paths
+        activeSeries.forEach(s => {
+          const vals = s.values.slice(sliceStart);
+          const pts = vals.map((v, i) => [xAt(i), yAt(v)]);
+          const dPath = pts.map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ");
+          html += `<path d="${dPath}" fill="none" stroke="${s.color}" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" />`;
+          const last = pts[pts.length - 1];
+          html += `<circle cx="${last[0]}" cy="${last[1]}" r="3.6" fill="${s.color}" stroke="#fff" stroke-width="1.6" />`;
+        });
+
+        // Hover overlay
+        html += `<line id="hoverLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="#8A867D" stroke-width="1" stroke-dasharray="3 3" opacity="0" />`;
+        html += `<g id="hoverDots"></g>`;
+        html += `<rect id="hoverZone" x="${pad.left}" y="${pad.top}" width="${plotW}" height="${plotH}" fill="transparent" style="cursor:crosshair;" />`;
+
+        svg.innerHTML = html;
+
+        const hoverZone = svg.querySelector("#hoverZone");
+        const hoverLine = svg.querySelector("#hoverLine");
+        const hoverDots = svg.querySelector("#hoverDots");
+
+        hoverZone.addEventListener("mousemove", e => {
+          const rect = svg.getBoundingClientRect();
+          const relX = ((e.clientX - rect.left) / rect.width) * W;
+          let idx = Math.round(((relX - pad.left) / plotW) * (dates.length - 1));
+          idx = Math.max(0, Math.min(dates.length - 1, idx));
+          const x = xAt(idx);
+          const dt = dates[idx];
+
+          hoverLine.setAttribute("x1", x);
+          hoverLine.setAttribute("x2", x);
+          hoverLine.setAttribute("opacity", "1");
+
+          hoverDots.innerHTML = activeSeries.map(s => {
+            const v = s.values[sliceStart + idx];
+            return `<circle cx="${x}" cy="${yAt(v)}" r="4.5" fill="${s.color}" stroke="#fff" stroke-width="2" />`;
+          }).join("");
+
+          const ev = relevantEvents.find(x => x.date === dt);
+          const rows = activeSeries
+            .map(s => ({ name: s.name, color: s.color, val: s.values[sliceStart + idx] }))
+            .sort((a, b) => b.val - a.val);
+
+          els.chartTooltip.innerHTML = `
+            <div class="tt-date">${dt} · ${pData.name}</div>
+            ${ev ? `<div class="tt-event"><b>★ ${ev.label}</b>${ev.reason ? `<div style="margin-top:3px;opacity:0.9;line-height:1.4;">${ev.reason}</div>` : ""}</div>` : ""}
+            ${rows.map(r => `
+              <div class="tt-row">
+                <span class="tt-name"><span class="tt-dot" style="background:${r.color}"></span>${r.name}</span>
+                <span class="tt-val">${r.val}${pData.unit}</span>
+              </div>
+            `).join("")}
+          `;
+
+          const wrapRect = els.chartWrap.getBoundingClientRect();
+          const pxX = e.clientX - wrapRect.left;
+          const pxY = e.clientY - wrapRect.top;
+          const ttW = els.chartTooltip.offsetWidth || 195;
+          const left = pxX + ttW + 24 > wrapRect.width ? pxX - ttW - 14 : pxX + 14;
+          els.chartTooltip.style.left = `${Math.max(8, left)}px`;
+          els.chartTooltip.style.top = `${Math.max(8, pxY - 24)}px`;
+          els.chartTooltip.classList.add("show");
+        });
+
+        hoverZone.addEventListener("mouseleave", () => {
+          hoverLine.setAttribute("opacity", "0");
+          hoverDots.innerHTML = "";
+          els.chartTooltip.classList.remove("show");
+        });
+      }
+
+      /* ===================== EVENTS ===================== */
+      els.dateSelect.addEventListener("change", e => loadDailyAndRender(e.target.value));
+
+      els.platformTabs.addEventListener("click", e => {
+        const btn = e.target.closest(".seg-btn");
+        if (!btn) return;
+        state.platform = btn.dataset.platform;
+        els.platformTabs.querySelectorAll(".seg-btn").forEach(b => b.classList.toggle("active", b === btn));
+        renderTrends();
+      });
+
+      els.groupTabs.addEventListener("click", e => {
+        const btn = e.target.closest(".seg-btn");
+        if (!btn) return;
+        state.group = btn.dataset.group;
+        els.groupTabs.querySelectorAll(".seg-btn").forEach(b => b.classList.toggle("active", b === btn));
+        renderTrends();
+      });
+
+      els.rangeTabs.addEventListener("click", e => {
+        const btn = e.target.closest(".seg-btn");
+        if (!btn) return;
+        state.range = Number(btn.dataset.range);
+        els.rangeTabs.querySelectorAll(".seg-btn").forEach(b => b.classList.toggle("active", b === btn));
+        renderTrends();
+      });
+
+      els.legendBar.addEventListener("click", e => {
+        const pill = e.target.closest(".legend-pill");
+        if (!pill) return;
+        const k = `${state.platform}:${state.group}:${pill.dataset.key}`;
+        state.hiddenSeries[k] = !state.hiddenSeries[k];
+        renderTrends();
+      });
+
+      els.sourceFilter.addEventListener("click", e => {
+        const pill = e.target.closest(".source-pill");
+        if (!pill) return;
+        state.sourceFilter = pill.dataset.source;
+        els.sourceFilter.querySelectorAll(".source-pill").forEach(p => p.classList.toggle("active", p === pill));
+        renderEvidence();
+      });
+
+      /* ===================== EXPORT STANDALONE HTML ===================== */
+      function downloadFile(filename, content, mime) {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      els.exportBtn.addEventListener("click", () => {
+        const currentDaily = {};
+        if (window.RADAR_DAILY && window.RADAR_DAILY[state.date]) {
+          currentDaily[state.date] = window.RADAR_DAILY[state.date];
+        }
+        const singleManifest = (window.RADAR_MANIFEST || []).filter(m => m.date === state.date);
+        const inlineScripts = [
+          `<script>window.RADAR_MANIFEST = ${JSON.stringify(singleManifest)};<\/script>`,
+          `<script>window.RADAR_TRENDS = ${JSON.stringify(window.RADAR_TRENDS)};<\/script>`,
+          `<script>window.RADAR_DAILY = ${JSON.stringify(currentDaily)};<\/script>`
+        ].join("\n  ");
+
+        const fullDoc = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        const replaced = fullDoc.replace(
+          /<!-- INLINE_DATA_START -->[\s\S]*?<!-- INLINE_DATA_END -->/,
+          `<!-- INLINE_DATA_START -->\n  ${inlineScripts}\n  <!-- INLINE_DATA_END -->`
+        );
+        downloadFile(`personal-agent-radar-${state.date}.html`, replaced, "text/html;charset=utf-8");
+        showToast(`已导出单页简报 personal-agent-radar-${state.date}.html`);
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window._rT);
+        window._rT = setTimeout(renderTrends, 120);
+      });
+
+      initVisibilityDefaults();
+      populateDates();
+      renderDaily();
+      renderTrends();
+    })();
+  </script>
+</body>
+</html>
