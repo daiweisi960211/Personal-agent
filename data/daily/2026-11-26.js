@@ -154,20 +154,20 @@ window.RADAR_DAILY["2026-11-26"] = {
         highlight: "「以人而非任务组织」的单窗口个人助理，右侧「个人总面板」支持查看/修改/删除长期记忆",
         detail: "国内版接入飞书、钉钉、企微、腾讯文档与邮箱；实测可从录音/日历/邮件里主动抓取到期回款未跟进并发出早晚简报。",
         source: "wechat_mp",
-        sourceName: "极客公园 / 品玩",
-        url: "https://www.baidu.com/s?wd=Today+AI+%E9%BD%90%E4%BF%8A%E5%85%83+%E4%B8%AA%E4%BA%BA%E5%8A%A9%E7%90%86"
+        sourceName: "36氪",
+        url: "https://36kr.com/p/4039749830120583"
       },
       {
         id: "qianwengo",
         name: "千问Go！",
         vendor: "阿里巴巴 · 通义千问",
-        stage: "11 月下旬全量铺开",
+        stage: "11.25 免费开放代打电话",
         updatedAt: "2026-11-25",
         highlight: "内嵌千问 App，推出免费「代打电话」并打通淘宝/支付宝/飞猪/高德比价支付闭环",
         detail: "将 Personal Agent 锚定高频交易与本地生活履约，直接向小豆的收费代打电话模式发起正面价格战。",
         source: "wechat_mp",
-        sourceName: "公开媒体报道",
-        url: "https://www.baidu.com/s?wd=%E5%8D%83%E9%97%AEGo+%E4%BB%A3%E6%89%93%E7%94%B5%E8%AF%9D+Personal+Agent"
+        sourceName: "极客公园",
+        url: "https://www.geekpark.net/news/372279"
       },
       {
         id: "xiaowei",
@@ -190,20 +190,20 @@ window.RADAR_DAILY["2026-11-26"] = {
         highlight: "转型个人事务托管 Agent，打通 MCP/飞书/钉钉/支付宝并引入 APASS 安全隔离托管",
         detail: "主打 24 小时盯机票降价、自动续费核对、退差价与航班延误索赔等强执行办事链路。",
         source: "wechat_mp",
-        sourceName: "36氪 / 中国日报",
-        url: "https://www.baidu.com/s?wd=%E8%9A%82%E8%9A%81+%E7%81%B5%E5%85%89+2.0+Personal+Agent"
+        sourceName: "36氪",
+        url: "https://36kr.com/p/4043978243953537"
       },
       {
         id: "yuanbao",
         name: "腾讯元宝",
         vendor: "腾讯",
-        stage: "生态持续整合",
+        stage: "布局元宝助手 App",
         updatedAt: "2026-11-24",
         highlight: "打通公众号与腾讯文档内容生态，推进多智能体知识协同",
         detail: "与微信小微形成「元宝重思考 + 小微轻触达」的双线分工。",
         source: "wechat_mp",
-        sourceName: "公开媒体报道",
-        url: "https://www.baidu.com/s?wd=%E8%85%BE%E8%AE%AF%E5%85%83%E5%AE%9D+Personal+Agent+%E6%99%BA%E8%83%BD%E4%BD%93"
+        sourceName: "IT之家",
+        url: "https://www.ithome.com/1/012/026.htm"
       }
     ],
     overseas: [
@@ -259,13 +259,13 @@ window.RADAR_DAILY["2026-11-26"] = {
         id: "gemini_spark",
         name: "Gemini Spark",
         vendor: "Google",
-        stage: "Workspace 内测",
+        stage: "Workspace 持续扩展",
         updatedAt: "2026-11-24",
-        highlight: "原生嵌入 Gmail / Calendar / Drive 的后台持续任务执行",
-        detail: "主打系统级零摩擦触发，将主动发现直接沉淀到原生 Google 日历与任务流。",
+        highlight: "原生嵌入 Gmail / Calendar / Drive 的后台持续任务执行（Tasks in Gemini）",
+        detail: "主打系统级零摩擦触发，将主动发现与定时任务直接沉淀到原生 Google 生态。",
         source: "twitter",
-        sourceName: "Twitter (X)",
-        url: "https://x.com/search?q=%22Gemini%20Spark%22%20agent&src=typed_query&f=live"
+        sourceName: "Google Blog",
+        url: "https://blog.google/innovation-and-ai/products/gemini-app/tasks-in-gemini-free-new-features/"
       }
     ]
   },
