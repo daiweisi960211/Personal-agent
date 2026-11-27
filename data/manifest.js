@@ -1,5 +1,6 @@
 window.RADAR_MANIFEST = [
-  { date: "2026-11-26", label: "2026-11-26（周四 · 最新）", headline: "中美生态差异与「装完吃灰」成焦点，Claude Duet 海外热度反弹" },
+  { date: "2026-11-27", label: "2026-11-27（周五 · 最新）", headline: "小豆次日百度回落至 2,401，海外实测 Grok Bot 14.3 小时烧光周额度，MacRemote 打通本机 MCP" },
+  { date: "2026-11-26", label: "2026-11-26（周四）", headline: "中美生态差异与「装完吃灰」成焦点，Claude Duet 海外热度反弹" },
   { date: "2026-11-25", label: "2026-11-25（周三）", headline: "千问Go 免费代打电话迎战小豆，小豆首日百度收录破 3,752，Claude Duet 扩至日印巴印" },
   { date: "2026-11-24", label: "2026-11-24（周二）", headline: "字节「小豆」正式开启公测，Meta Muse 接入沃尔玛黑五下单通道" },
   { date: "2026-11-23", label: "2026-11-23（周一）", headline: "主动式 PA「Roze」金句刷屏，Anthropic 发布 Claude Ship 代码审批流" },
